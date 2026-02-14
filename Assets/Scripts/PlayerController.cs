@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private Label scoreText;
 
 
+    public GameObject explosionEffect;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         // destroy this game object
         Destroy(gameObject);
+        Instantiate(explosionEffect, transform.position, transform.rotation);
     }
 
     void updateScore()
