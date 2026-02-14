@@ -33,13 +33,27 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        updateScore();
+        movePlayer();
+        updateBoosterFlame();
+    }
 
-        // score
+    // Unity calls this method when this object has a collision
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // destroy this game object
+        Destroy(gameObject);
+    }
+
+    void updateScore()
+    {
         elapsedTime += Time.deltaTime;
         score = Mathf.FloorToInt(elapsedTime * scoreMultiplier);
         scoreText.text = "Score: " + score;
+    }
 
-        // inputs for movement
+    void movePlayer()
+    {
         if (Mouse.current.leftButton.isPressed)
         {
             // convert mouse position to world coordinates
@@ -62,8 +76,10 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
             }
         }
+    }
 
-        // set the booster flame
+    void updateBoosterFlame()
+    {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             boosterFlame.SetActive(true);
@@ -72,12 +88,5 @@ public class PlayerController : MonoBehaviour
         {
             boosterFlame.SetActive(false);
         }
-    }
-
-    // Unity calls this method when this object has a collision
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        // destroy this game object
-        Destroy(gameObject);
     }
 }
