@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 
     private float elapsedTime = 0f;
     private float score = 0f;
+    private float highScore = 0f;
     private float scoreMultiplier = 10f;
 
     Rigidbody2D rb;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     public UIDocument uiDocument;
     private Label scoreText;
+    private Label highScoreText;
     private Button restartButton;
 
 
@@ -28,10 +30,16 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        // get the score text label
+        // get ui elements
         // .rootVisualElement gives you access to the top-level container of the UI layout.
         // .Q<Label>("ScoreLabel") uses Unity's query system to find the first element of type Label with the name ScoreLabel.
         scoreText = uiDocument.rootVisualElement.Q<Label>("ScoreLabel");
+        highScoreText = uiDocument.rootVisualElement.Q<Label>("HighScoreLabel");
+
+        // load high score from PlayerPrefs
+        highScore = PlayerPrefs.GetFloat("HighScore", 0f);
+        highScoreText.text = "Highscore: " + highScore;
+
         restartButton = uiDocument.rootVisualElement.Q<Button>("RestartButton");
 
         restartButton.style.display = DisplayStyle.None;
@@ -65,6 +73,13 @@ public class PlayerController : MonoBehaviour
         elapsedTime += Time.deltaTime;
         score = Mathf.FloorToInt(elapsedTime * scoreMultiplier);
         scoreText.text = "Score: " + score;
+
+        if (score > highScore)
+        {
+            highScore = score;
+            PlayerPrefs.SetFloat("HighScore", highScore);
+            highScoreText.text = "Highscore: " + highScore;
+        }
     }
 
     void movePlayer()
